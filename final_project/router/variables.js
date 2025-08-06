@@ -146,7 +146,7 @@ const STATUS_MESSAGE = {
   511: { message: "Network Auth Required", description: "Client needs network authentication" }
 }
 
-const API_VERSION = 1.0;
+const API_VERSION = '1.0.0';
 
 module.exports = {
   STATUS,

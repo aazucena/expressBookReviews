@@ -4,6 +4,7 @@ const session = require('express-session')
 const customer_routes = require('./router/auth_users.js').authenticated;
 const genl_routes = require('./router/general.js').general;
 const { API_VERSION } = require("./router/variables.js");
+const { userVerificationMiddleware } = require("./router/middlewares/auth.js");
 
 const app = express();
 app.use(express.json());
@@ -14,14 +15,12 @@ router.use("/customer", session({
   saveUninitialized: true
 }))
 
-router.use("/customer/auth/*", function auth(req,res,next){
-//Write the authenication mechanism here
-});
+router.use("/customer/auth/*", userVerificationMiddleware);
 
 router.use("/customer", customer_routes);
 router.use("/", genl_routes);
 
-const version = Number(API_VERSION);
+const version = Number(API_VERSION.split(".")[0]);
 const API_PREFIX = `/api/v${version}`;
 app.use(API_PREFIX, router);
 

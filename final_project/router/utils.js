@@ -13,24 +13,34 @@ const getStatusMessage = (status) => {
   return message;
 }
 
-const sendResponse = (res, status, payload = {}) => {
+const sendResponse = (req, res, status, payload = {}) => {
   const code = getStatusCode(status);
   const message = getStatusMessage(status);
   return res.status(status).json({
+    message: message,
     ...payload,
     status: status,
     code: code,
-    message: message,
     meta: {
       ...(payload?.meta ?? {}),
       timestamp: new Date().toISOString(),
-      version: API_VERSION.toFixed(2),
+      version: `${API_VERSION}`,
+      request: {
+        method: req.method,
+        endpoint: req.path
+      }
     }
   });
+};
+
+const sendResponseText = (res, status, message) => {
+  const statusMessage = getStatusMessage(status);
+  return res.status(status).send(message ?? statusMessage);
 };
 
 module.exports = {
   getStatusCode,
   getStatusMessage,
   sendResponse,
+  sendResponseText,
 }
