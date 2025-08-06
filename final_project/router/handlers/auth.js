@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { USERS } = require("../data/index.js");
-const { sendResponse, sendResponseText } = require("../utils.js");
-const { STATUS } = require("../variables.js");
+const { sendResponse, sendResponseText } = require("../utils/index.js");
+const { STATUS } = require("../variables/index.js");
 const { authenticateUser } = require("../services/auth.js");
 
 const loginHandler = (req, res) => {

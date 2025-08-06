@@ -1,4 +1,4 @@
-const { STATUS_MESSAGE, API_VERSION } = require("./variables.js");
+const { STATUS_MESSAGE, API_VERSION } = require("../variables/index.js");
 
 const getStatusCode = (status) => {
   const data = STATUS_MESSAGE[status];

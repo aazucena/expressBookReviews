@@ -1,6 +1,6 @@
 const { REVIEWS, BOOKS } = require("../data/index.js");
-const { sendResponse, sendResponseText } = require("../utils.js");
-const { STATUS } = require("../variables.js");
+const { sendResponse, sendResponseText } = require("../utils/index.js");
+const { STATUS } = require("../variables/index.js");
 const { isValid } = require("../services/auth.js");
 
 const createReviewHandler = (req, res) => {

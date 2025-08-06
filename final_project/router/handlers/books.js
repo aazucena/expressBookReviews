@@ -1,6 +1,6 @@
-const { STATUS } = require("../variables.js");
-const { BOOKS, REVIEWS } = require("../data/index.js");
-const { sendResponse, sendResponseText } = require("../utils.js");
+const { STATUS } = require("../variables/index.js");
+const { BOOKS } = require("../data/index.js");
+const { sendResponse } = require("../utils/index.js");
 
 // Get the book list available in the shop
 const readBooksHandler = (req, res) => {

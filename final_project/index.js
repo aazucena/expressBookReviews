@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const session = require('express-session')
 const customer_routes = require('./router/auth_users.js').authenticated;
 const genl_routes = require('./router/general.js').general;
-const { API_VERSION } = require("./router/variables.js");
+const { API_VERSION } = require("./router/variables/index.js");
 const { userVerificationMiddleware } = require("./router/middlewares/auth.js");
 
 const app = express();

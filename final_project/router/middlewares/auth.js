@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const { STATUS } = require("../variables.js");
-const { sendResponseText } = require("../utils.js");
+const { STATUS } = require("../variables/index.js");
+const { sendResponseText } = require("../utils/index.js");
 
 
 
