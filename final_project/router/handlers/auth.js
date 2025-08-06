@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { USERS } = require("../data/index.js");
-const { sendResponseText } = require("../utils.js");
+const { sendResponse, sendResponseText } = require("../utils.js");
 const { STATUS } = require("../variables.js");
 const { authenticateUser } = require("../services/auth.js");
 
@@ -28,7 +28,36 @@ const loginHandler = (req, res) => {
   }
 };
 
+const registerHandler = (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  if (!isValid(username)) {
+    return sendResponseText(req, res, STATUS.BAD_REQUEST, "Username already exists");
+  }
+  if (!username || !password) {
+    return sendResponseText(req, res, STATUS.BAD_REQUEST, "Missing username or password");
+  }
+
+  USERS.push({
+    id: crypto.randomUUID(),
+    username,
+    password
+  });
+  return sendResponseText(res, STATUS.CREATED, "User registered successfully");
+};
+
+const readMeHandler = (req, res) => {
+  const username = req.session.authorization.username;
+  const user = USERS.find((user) => user.username === username);
+  if (!user) {
+    return sendResponseText(res, STATUS.UNAUTHORIZED, "User not logged in");
+  }
+  user.password = new Array(user.password.length).fill('*').join('');
+  return sendResponse(res, STATUS.OK, { data: user });
+};
 
 module.exports = {
-  loginHandler
+  loginHandler,
+  readMeHandler,
+  registerHandler,
 }
