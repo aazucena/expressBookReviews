@@ -47,3 +47,9 @@ vercel
 .env.test.local
 
 .env
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
