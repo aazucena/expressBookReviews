@@ -1,8 +1,12 @@
 const express = require('express');
-let books = require("./booksdb.js");
-let isValid = require("./auth_users.js").isValid;
-let users = require("./auth_users.js").users;
+const books = require("./booksdb.js");
+const { users, isValid } = require("./auth_users.js");
+const { STATUS } = require("./variables.js");
+const { sendResponse } = require("./utils.js");
 const public_users = express.Router();
+
+
+const items = Object.entries(books).map(([_, item]) => item);
 
 
 public_users.post("/register", (req,res) => {
@@ -11,9 +15,16 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+public_users.get('/',function (_req, res) {
+  return sendResponse(res, STATUS.OK, { 
+    data: items, 
+    meta: {  
+      total: items.length,
+      page: 1,
+      page_size: items.length,
+      total_pages: 1,
+    } 
+  });
 });
 
 // Get book details based on ISBN

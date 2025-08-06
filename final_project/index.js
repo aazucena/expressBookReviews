@@ -3,20 +3,28 @@ const jwt = require('jsonwebtoken');
 const session = require('express-session')
 const customer_routes = require('./router/auth_users.js').authenticated;
 const genl_routes = require('./router/general.js').general;
+const { API_VERSION } = require("./router/variables.js");
 
 const app = express();
-
 app.use(express.json());
+const router = express.Router();
+router.use("/customer", session({
+  secret:"fingerprint_customer",
+  resave: true, 
+  saveUninitialized: true
+}))
 
-app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUninitialized: true}))
-
-app.use("/customer/auth/*", function auth(req,res,next){
+router.use("/customer/auth/*", function auth(req,res,next){
 //Write the authenication mechanism here
 });
- 
-const PORT =5000;
 
-app.use("/customer", customer_routes);
-app.use("/", genl_routes);
+router.use("/customer", customer_routes);
+router.use("/", genl_routes);
 
-app.listen(PORT,()=>console.log("Server is running"));
+const version = Number(API_VERSION);
+const API_PREFIX = `/api/v${version}`;
+app.use(API_PREFIX, router);
+
+const PORT = 5000;
+
+app.listen(PORT,()=>console.log(`Server is running at http://localhost:${PORT}${API_PREFIX}`));
