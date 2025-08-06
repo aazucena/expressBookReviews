@@ -1,8 +1,7 @@
-const express = require('express');
+const express = require("express");
 const { loginHandler, readMeHandler } = require("./handlers/auth.js");
 const { createReviewHandler } = require("./handlers/reviews.js");
 const regd_users = express.Router();
-
 
 //only registered users can login
 regd_users.post("/login", loginHandler);

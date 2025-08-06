@@ -18,7 +18,11 @@ const createReviewHandler = (req, res) => {
   }
   const book = BOOKS.find((book) => book.isbn === isbn);
   if (!book) {
-    return sendResponseText(res, STATUS.NOT_FOUND, `Book with ISBN ${isbn} not found`);
+    return sendResponseText(
+      res,
+      STATUS.NOT_FOUND,
+      `Book with ISBN ${isbn} not found`,
+    );
   }
 
   const payload = {
@@ -29,16 +33,21 @@ const createReviewHandler = (req, res) => {
     created_at: new Date().toISOString(),
     updated_at: null,
     deleted_at: null,
-  }
+  };
 
   REVIEWS.push(payload);
   for (const book of BOOKS) {
     if (book.isbn === isbn) {
-      BOOKS[book.id].reviews = REVIEWS.filter((review) => review.book === isbn).map((review) => review.id);
+      BOOKS[book.id].reviews = REVIEWS.filter(
+        (review) => review.book === isbn,
+      ).map((review) => review.id);
     }
   }
   //Write your code here
-  return sendResponse(req, res, STATUS.OK, { data: payload, message: "Review added successfully" });
+  return sendResponse(req, res, STATUS.OK, {
+    data: payload,
+    message: "Review added successfully",
+  });
 };
 
 // Get book review
@@ -49,9 +58,13 @@ const retrieveReviewByISBNHandler = (req, res) => {
   }
   const reviews = REVIEWS.filter((review) => review.book === isbn);
   if (!reviews) {
-    return sendResponseText(res, STATUS.NOT_FOUND, `Reviews with Book ISBN ${isbn} not found`);
+    return sendResponseText(
+      res,
+      STATUS.NOT_FOUND,
+      `Reviews with Book ISBN ${isbn} not found`,
+    );
   }
-  return sendResponse(req, res, STATUS.OK, { 
+  return sendResponse(req, res, STATUS.OK, {
     data: reviews,
     message: "Successfully retrieved reviews for the book with ISBN " + isbn,
     meta: {
@@ -59,11 +72,11 @@ const retrieveReviewByISBNHandler = (req, res) => {
       page: 1,
       page_size: reviews.length,
       total_pages: 1,
-    }
+    },
   });
 };
 
 module.exports = {
   createReviewHandler,
   retrieveReviewByISBNHandler,
-}
+};

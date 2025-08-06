@@ -11,7 +11,7 @@ const isValid = (username) => {
 const authenticateUser = (username, password) => {
   // Filter the users array for any user with the same username and password
   const validusers = USERS.filter((user) => {
-    return (user.username === username && user.password === password);
+    return user.username === username && user.password === password;
   });
   // Return true if any valid user is found, otherwise false
   return validusers.length > 0;
@@ -19,5 +19,5 @@ const authenticateUser = (username, password) => {
 
 module.exports = {
   isValid,
-  authenticateUser
+  authenticateUser,
 };

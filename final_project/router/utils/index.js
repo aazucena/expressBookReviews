@@ -3,15 +3,15 @@ const { STATUS_MESSAGE, API_VERSION } = require("../variables/index.js");
 const getStatusCode = (status) => {
   const data = STATUS_MESSAGE[status];
   const message = data?.message ?? "Unknown Error";
-  const code = message.toUpperCase().replace(' ', "_");
+  const code = message.toUpperCase().replace(" ", "_");
   return code;
-}
+};
 
 const getStatusMessage = (status) => {
   const data = STATUS_MESSAGE[status];
   const message = data?.description ?? "Unknown Error";
   return message;
-}
+};
 
 const sendResponse = (req, res, status, payload = {}) => {
   const code = getStatusCode(status);
@@ -27,9 +27,9 @@ const sendResponse = (req, res, status, payload = {}) => {
       version: `${API_VERSION}`,
       request: {
         method: req.method,
-        endpoint: req.path
-      }
-    }
+        endpoint: req.path,
+      },
+    },
   });
 };
 
@@ -43,4 +43,4 @@ module.exports = {
   getStatusMessage,
   sendResponse,
   sendResponseText,
-}
+};

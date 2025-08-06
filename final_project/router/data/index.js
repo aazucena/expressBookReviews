@@ -4,7 +4,7 @@ const REVIEWS = require("./reviews.js");
 
 const buildDataset = (data) => {
   return Object.entries(data).map(([id, item]) => ({ id: id, ...item }));
-}
+};
 
 const DB = {
   BOOKS: buildDataset(BOOKS),
