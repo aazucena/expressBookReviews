@@ -32,7 +32,6 @@ const createReviewHandler = (req, res) => {
     message: message,
     created_at: new Date().toISOString(),
     updated_at: null,
-    deleted_at: null,
   };
 
   REVIEWS.push(payload);
@@ -48,6 +47,64 @@ const createReviewHandler = (req, res) => {
     data: payload,
     message: "Review added successfully",
   });
+};
+
+const updateReviewHandler = (req, res) => {
+  if (!isValid(req.session.authorization.username)) {
+    return sendResponseText(res, STATUS.UNAUTHORIZED, "User not logged in");
+  }
+
+  const id = req.params.id;
+  if (!id) {
+    return sendResponseText(res, STATUS.BAD_REQUEST, "Missing Review ID");
+  }
+  const message = req.body.message;
+  if (!message) {
+    return sendResponseText(res, STATUS.BAD_REQUEST, "Missing review text");
+  }
+
+  const index = REVIEWS.findIndex((review) => review.id === id);
+  if (index === -1) {
+    return sendResponseText(
+      res,
+      STATUS.NOT_FOUND,
+      `Review with ID ${id} not found`,
+    );
+  }
+
+  REVIEWS[index] = {
+    ...REVIEWS[index],
+    message: message,
+    updated_at: new Date().toISOString(),
+  };
+
+  return sendResponse(req, res, STATUS.OK, {
+    data: payload,
+    message: "Review updated successfully",
+  });
+};
+
+// Delete review
+const deleteReviewHandler = (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    return sendResponseText(res, STATUS.BAD_REQUEST, "Missing Review ID");
+  }
+  const index = REVIEWS.findIndex((review) => review.id === id);
+  if (index === -1) {
+    return sendResponseText(
+      res,
+      STATUS.NOT_FOUND,
+      `Review with ID ${id} not found`,
+    );
+  }
+  const review = REVIEWS[index];
+  const book = BOOKS.find((book) => book.isbn === review.book);
+  book.reviews = book.reviews.filter((reviewId) => reviewId !== id);
+  REVIEWS.splice(index, 1);
+  BOOKS[book.id] = book;
+
+  return sendResponseText(res, STATUS.OK, "Review deleted successfully");
 };
 
 // Get book review
@@ -78,5 +135,7 @@ const retrieveReviewByISBNHandler = (req, res) => {
 
 module.exports = {
   createReviewHandler,
+  updateReviewHandler,
+  deleteReviewHandler,
   retrieveReviewByISBNHandler,
 };
