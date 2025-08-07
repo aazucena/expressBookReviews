@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const { USERS } = require("../data/index.js");
 const { sendResponse, sendResponseText } = require("../utils/index.js");
 const { STATUS } = require("../variables/index.js");
-const { authenticateUser, isValid } = require("../services/auth.js");
+const { authenticateUser, isValid } = require("../controllers/auth.js");
 
 const loginHandler = (req, res) => {
   const username = req.body.username;

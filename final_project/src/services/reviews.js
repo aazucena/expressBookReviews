@@ -1,7 +1,7 @@
 const { REVIEWS, BOOKS } = require("../data/index.js");
 const { sendResponse, sendResponseText } = require("../utils/index.js");
 const { STATUS } = require("../variables/index.js");
-const { isValid } = require("../services/auth.js");
+const { isValid } = require("../controllers/auth.js");
 
 const createReviewHandler = (req, res) => {
   if (!isValid(req.session.authorization.username)) {
