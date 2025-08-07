@@ -78,8 +78,14 @@ const readMeHandler = (req, res) => {
   return sendResponse(req, res, STATUS.OK, { data: user });
 };
 
+const logoutHandler = (req, res) => {
+  req.session.destroy();
+  return sendResponseText(res, STATUS.OK, "User logged out successfully");
+};
+
 module.exports = {
   loginHandler,
+  logoutHandler,
   readMeHandler,
   registerHandler,
 };
