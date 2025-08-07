@@ -12,10 +12,15 @@ const createReviewHandler = (req, res) => {
   if (!isbn) {
     return sendResponseText(res, STATUS.BAD_REQUEST, "Missing ISBN");
   }
-  const message = req.body.message;
-  if (!message) {
-    return sendResponseText(res, STATUS.BAD_REQUEST, "Missing review text");
+  const comment = req.body.comment;
+  if (!comment) {
+    return sendResponseText(res, STATUS.BAD_REQUEST, "Missing comment");
   }
+  const rating = req.body.rating;
+  if (!rating) {
+    return sendResponseText(res, STATUS.BAD_REQUEST, "Missing rating");
+  }
+
   const book = BOOKS.find((book) => book.isbn === isbn);
   if (!book) {
     return sendResponseText(
@@ -29,7 +34,8 @@ const createReviewHandler = (req, res) => {
     id: crypto.randomUUID(),
     user: req.session.authorization.id,
     book: book.isbn,
-    message: message,
+    rating: rating,
+    comment: comment,
     created_at: new Date().toISOString(),
     updated_at: null,
   };
@@ -58,10 +64,6 @@ const updateReviewHandler = (req, res) => {
   if (!id) {
     return sendResponseText(res, STATUS.BAD_REQUEST, "Missing Review ID");
   }
-  const message = req.body.message;
-  if (!message) {
-    return sendResponseText(res, STATUS.BAD_REQUEST, "Missing review text");
-  }
 
   const index = REVIEWS.findIndex((review) => review.id === id);
   if (index === -1) {
@@ -72,9 +74,12 @@ const updateReviewHandler = (req, res) => {
     );
   }
 
+  const body = req.body;
+
   REVIEWS[index] = {
     ...REVIEWS[index],
-    message: message,
+    comment: body?.comment ?? REVIEWS[index].comment,
+    rating: body?.rating ?? REVIEWS[index].rating,
     updated_at: new Date().toISOString(),
   };
 
