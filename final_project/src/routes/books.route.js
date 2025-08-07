@@ -9,7 +9,8 @@ const {
 const { retrieveReviewByISBNHandler } = require("../services/reviews.js");
 const public = express.Router();
 
-public.post("/register", registerHandler);
+// Register a new user
+public.post("/customer/register", registerHandler);
 
 // Get the book list available in the shop
 public.get("/", readBooksHandler);
