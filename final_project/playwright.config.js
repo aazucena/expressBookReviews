@@ -7,7 +7,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [["line"], ['html']],
   use: {
     // All requests we send go to this API endpoint.
     baseURL: 'http://localhost:5000',
@@ -17,7 +17,7 @@ export default defineConfig({
     ignoreHTTPSErrors: true,
     video: 'off',
     screenshot: 'off',
-    trace: 'on-first-retry',
+    trace: 'on',
   },
   projects: [
     {
