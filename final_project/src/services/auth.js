@@ -46,16 +46,13 @@ const registerHandler = (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   if (!isValid(username)) {
-    return sendResponseText(
-      req,
-      res,
+    return sendResponseText(res,
       STATUS.BAD_REQUEST,
       "Username already exists",
     );
   }
   if (!username || !password) {
     return sendResponseText(
-      req,
       res,
       STATUS.BAD_REQUEST,
       "Missing username or password",
@@ -71,13 +68,14 @@ const registerHandler = (req, res) => {
 };
 
 const readMeHandler = (req, res) => {
-  const username = req.session.authorization.username;
+  const session = req.session;
+  const username = session.authorization.username;
   const user = USERS.find((user) => user.username === username);
   if (!user) {
     return sendResponseText(res, STATUS.UNAUTHORIZED, "User not logged in");
   }
   user.password = new Array(user.password.length).fill("*").join("");
-  return sendResponse(res, STATUS.OK, { data: user });
+  return sendResponse(req, res, STATUS.OK, { data: user });
 };
 
 module.exports = {
