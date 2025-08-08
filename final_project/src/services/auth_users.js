@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const DB = require("../data/index.js");
 const { sendResponse, sendResponseText } = require("../utils/index.js");
 const { STATUS } = require("../variables/index.js");
-const Controller = require("../controllers/auth.js");
+const Controller = require("../controllers/auth_users.js");
 
 const { authenticateUser, blockPassword, isValid } = new Controller(DB);
 

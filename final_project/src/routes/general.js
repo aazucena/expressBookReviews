@@ -1,12 +1,12 @@
 const express = require("express");
-const { registerHandler } = require("../services/auth.js");
+const { registerHandler } = require("../services/auth_users.js");
 const {
   readBooksHandler,
   retrieveBookByISBNHandler,
   retrieveBookByAuthorHandler,
   retrieveBookByTitleHandler,
   retrieveReviewByISBNHandler,
-} = require("../services/public.js");
+} = require("../services/general.js");
 const public = express.Router();
 
 // Register a new user

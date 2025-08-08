@@ -1,18 +1,19 @@
 const express = require("express");
 const session = require("express-session");
-const auth_routes = require("./routes/auth.routes.js");
-const public_routes = require("./routes/public.route.js");
+const auth_routes = require("./routes/auth_users.js");
+const public_routes = require("./routes/general.js");
 const { API_PREFIX } = require("./variables/index.js");
-const { userVerificationMiddleware } = require("./middlewares/auth.js");
+const { userVerificationMiddleware } = require("./middlewares/auth_users.js");
 const expressOasGenerator = require("express-oas-generator");
 
 const app = express();
 
-app.use(express.json());expressOasGenerator.handleResponses(app, {
+app.use(express.json());
+expressOasGenerator.handleResponses(app, {
   swaggerDocumentOptions: {
     // Optional: customize Swagger UI appearance
-    customCss: '.swagger-ui { background-color: #f0f0f0; }'
-  }
+    customCss: ".swagger-ui { background-color: #f0f0f0; }",
+  },
 });
 
 const router = express.Router();
