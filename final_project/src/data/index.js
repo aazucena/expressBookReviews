@@ -7,7 +7,13 @@ const buildDataset = (data) => {
 class Database {
   constructor() {
     this.BOOKS = buildDataset(BOOKS);
-    this.USERS = [];
+    this.USERS = [
+      {
+          "id": crypto.randomUUID(),
+          "username": "john",
+          "password": "doe",
+      }
+    ];
     this.REVIEWS = [];
   }
 }

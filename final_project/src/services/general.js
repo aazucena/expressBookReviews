@@ -10,13 +10,13 @@ const { sendResponse } = require("../utils/index.js");
  *
  * @returns {Promise<void>}
  */
-const readBooksHandler = (req, res) => {
+const readBooksHandler = async (req, res) => {
   if (!DB.BOOKS || DB.BOOKS.length === 0) {
-    return sendResponse(req, res, STATUS.NOT_FOUND, {
+    return await sendResponse(req, res, STATUS.NOT_FOUND, {
       message: "No books found",
     });
   }
-  return sendResponse(req, res, STATUS.OK, {
+  return await sendResponse(req, res, STATUS.OK, {
     data: DB.BOOKS,
     meta: {
       total: DB.BOOKS.length,
@@ -35,16 +35,16 @@ const readBooksHandler = (req, res) => {
  *
  * @returns {Promise<void>}
  */
-const retrieveBookByISBNHandler = (req, res) => {
+const retrieveBookByISBNHandler = async (req, res) => {
   const isbn = req.params.isbn;
   const item = DB.BOOKS.find((book) => book.isbn === isbn);
 
   if (!item) {
-    return sendResponse(req, res, STATUS.NOT_FOUND, {
+    return await sendResponse(req, res, STATUS.NOT_FOUND, {
       message: `Unable to find book with ISBN "${isbn}"`,
     });
   }
-  return sendResponse(req, res, STATUS.OK, {
+  return await sendResponse(req, res, STATUS.OK, {
     data: item,
     message: `Book with ISBN "${isbn}" found successfully`,
   });
@@ -58,16 +58,16 @@ const retrieveBookByISBNHandler = (req, res) => {
  *
  * @returns {Promise<void>}
  */
-const retrieveBookByAuthorHandler = (req, res) => {
+const retrieveBookByAuthorHandler = async (req, res) => {
   const author = req.params.author;
   const items = DB.BOOKS.filter((book) => book.author === author);
 
   if (!items || items.length === 0) {
-    return sendResponse(req, res, STATUS.NOT_FOUND, {
+    return await sendResponse(req, res, STATUS.NOT_FOUND, {
       message: `Unable to find book with Author "${author}"`,
     });
   }
-  return sendResponse(req, res, STATUS.OK, {
+  return await sendResponse(req, res, STATUS.OK, {
     data: items,
     meta: {
       total: DB.BOOKS.length,
@@ -87,16 +87,16 @@ const retrieveBookByAuthorHandler = (req, res) => {
  *
  * @returns {Promise<void>}
  */
-const retrieveBookByTitleHandler = (req, res) => {
+const retrieveBookByTitleHandler = async (req, res) => {
   const title = req.params.title;
   const item = DB.BOOKS.find((book) => book.title === title);
 
   if (!item) {
-    return sendResponse(req, res, STATUS.NOT_FOUND, {
+    return await sendResponse(req, res, STATUS.NOT_FOUND, {
       message: `Unable to find book with Title "${title}"`,
     });
   }
-  return sendResponse(req, res, STATUS.OK, {
+  return await sendResponse(req, res, STATUS.OK, {
     data: item,
     message: `Book with Title "${title}" found successfully`,
   });
@@ -114,20 +114,20 @@ const retrieveBookByTitleHandler = (req, res) => {
  *
  * @returns {Promise<void>}
  */
-const retrieveReviewByISBNHandler = (req, res) => {
+const retrieveReviewByISBNHandler = async (req, res) => {
   const isbn = req.params.isbn;
   if (!isbn) {
-    return sendResponse(req, res, STATUS.BAD_REQUEST, {
+    return await sendResponse(req, res, STATUS.BAD_REQUEST, {
       message: "Missing ISBN",
     });
   }
   const reviews = DB.REVIEWS.filter((review) => review.book === isbn);
   if (!reviews) {
-    return sendResponse(req, res, STATUS.NOT_FOUND, {
+    return await sendResponse(req, res, STATUS.NOT_FOUND, {
       message: `Reviews with Book ISBN ${isbn} not found`,
     });
   }
-  return sendResponse(req, res, STATUS.OK, {
+  return await sendResponse(req, res, STATUS.OK, {
     data: reviews,
     message: "Successfully retrieved reviews for the book with ISBN " + isbn,
     meta: {
@@ -146,3 +146,4 @@ module.exports = {
   retrieveBookByTitleHandler,
   retrieveReviewByISBNHandler,
 };
+

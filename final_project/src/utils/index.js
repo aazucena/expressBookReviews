@@ -37,30 +37,35 @@ const getStatusMessage = (status) => {
  * The response includes a message, status code, and additional metadata such as
  * a timestamp, API version, and request details.
  */
-const sendResponse = (req, res, status, payload = {}) => {
-  const code = getStatusCode(status);
-  const message = getStatusMessage(status);
-  return res.status(status).json({
-    message: message,
-    ...payload,
-    status: status,
-    code: code,
-    meta: {
-      ...(payload?.meta ?? {}),
-      timestamp: new Date().toISOString(),
-      version: `${API_VERSION}`,
-      request: {
-        method: req.method,
-        path: req.path,
-        url: req.url,
-        query: req.query,
-        body: req.body,
-        params: req.params,
-        headers: req.headers,
+const sendResponse = async (req, res, status, payload = {}) => new Promise((resolve, reject) => {
+  try {
+    const code = getStatusCode(status);
+    const message = getStatusMessage(status);
+    const response = res.status(status).json({
+      message: message,
+      ...payload,
+      status: status,
+      code: code,
+      meta: {
+        ...(payload?.meta ?? {}),
+        timestamp: new Date().toISOString(),
+        version: `${API_VERSION}`,
+        request: {
+          method: req.method,
+          path: req.path,
+          url: req.url,
+          query: req.query,
+          body: req.body,
+          params: req.params,
+          headers: req.headers,
+        },
       },
-    },
-  });
-};
+    });
+    resolve(response);
+  } catch (error) {
+    reject(error);
+  }
+})
 
 /**
  * Sends a text response with a status code and optional message. If no message
@@ -70,10 +75,14 @@ const sendResponse = (req, res, status, payload = {}) => {
  * @param {number} status - The HTTP status code to set for the response.
  * @param {string} [message] - An optional message to include in the response.
  */
-const sendResponseText = (res, status, message) => {
-  const statusMessage = getStatusMessage(status);
-  return res.status(status).send(message ?? statusMessage);
-};
+const sendResponseText = async(res, status, message) => new Promise((resolve, reject) => {
+  try {
+    const statusMessage = getStatusMessage(status);
+    resolve(res.status(status).send(message ?? statusMessage));
+  } catch (error) {
+    reject(error);
+  }
+});
 
 
 module.exports = {

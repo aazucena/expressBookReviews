@@ -23,7 +23,7 @@ const userVerificationMiddleware = (req, res, next) => {
         req.user = user;
         next(); // Proceed to the next middleware
       } else {
-        return sendResponseText(
+        return await sendResponseText(
           res,
           STATUS.UNAUTHORIZED,
           "User not authenticated",
@@ -31,7 +31,7 @@ const userVerificationMiddleware = (req, res, next) => {
       }
     });
   } else {
-    return sendResponseText(res, STATUS.UNAUTHORIZED, "User not logged in");
+    return await sendResponseText(res, STATUS.UNAUTHORIZED, "User not logged in");
   }
 };
 
