@@ -25,7 +25,6 @@ const getStatusMessage = (status) => {
   return message;
 };
 
-
 /**
  * Sends a response with a status code and optional payload.
  *
@@ -54,36 +53,36 @@ const getStatusMessage = (status) => {
  *
  * @returns {Promise<import("express").Response>} A promise that resolves if the response is sent successfully, or rejects if there is an error
  */
-const sendResponse = async (req, res, status, payload = {}) => new Promise((resolve, reject) => {
-  try {
-    const code = getStatusCode(status);
-    const message = getStatusMessage(status);
-    const response = res.status(status).json({
-      message: message,
-      ...payload,
-      status: status,
-      code: code,
-      meta: {
-        ...(payload?.meta ?? {}),
-        timestamp: new Date().toISOString(),
-        version: `${API_VERSION}`,
-        request: {
-          method: req.method,
-          path: req.path,
-          url: req.url,
-          query: req.query,
-          body: req.body,
-          params: req.params,
-          headers: req.headers,
+const sendResponse = async (req, res, status, payload = {}) =>
+  new Promise((resolve, reject) => {
+    try {
+      const code = getStatusCode(status);
+      const message = getStatusMessage(status);
+      const response = res.status(status).json({
+        message: message,
+        ...payload,
+        status: status,
+        code: code,
+        meta: {
+          ...(payload?.meta ?? {}),
+          timestamp: new Date().toISOString(),
+          version: `${API_VERSION}`,
+          request: {
+            method: req.method,
+            path: req.path,
+            url: req.url,
+            query: req.query,
+            body: req.body,
+            params: req.params,
+            headers: req.headers,
+          },
         },
-      },
-    });
-    resolve(response);
-  } catch (error) {
-    reject(error);
-  }
-})
-
+      });
+      resolve(response);
+    } catch (error) {
+      reject(error);
+    }
+  });
 
 /**
  * Sends a text response with the specified status code and optional message.
@@ -95,15 +94,15 @@ const sendResponse = async (req, res, status, payload = {}) => new Promise((reso
  *
  * @returns {Promise<import("express").Response>} A promise that resolves if the response is sent successfully, or rejects if there is an error
  */
-const sendResponseText = async(res, status, message) => new Promise((resolve, reject) => {
-  try {
-    const statusMessage = getStatusMessage(status);
-    resolve(res.status(status).send(message ?? statusMessage));
-  } catch (error) {
-    reject(error);
-  }
-});
-
+const sendResponseText = async (res, status, message) =>
+  new Promise((resolve, reject) => {
+    try {
+      const statusMessage = getStatusMessage(status);
+      resolve(res.status(status).send(message ?? statusMessage));
+    } catch (error) {
+      reject(error);
+    }
+  });
 
 module.exports = {
   getStatusCode,

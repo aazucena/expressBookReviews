@@ -109,7 +109,6 @@ test("delete review", async ({ request }) => {
   );
 
   const result = await deleteResponse.text();
-  console.log("🚀 ~ result:", result)
   expect(result).toBeTruthy();
 
   const afterResponse = await request.get(reviewsEndpoint);
@@ -121,19 +120,21 @@ test("delete review", async ({ request }) => {
 test("delete review with ISBN", async ({ request }) => {
   const ISBN = getRandomBook().isbn;
   const reviewsEndpoint = API_PREFIX + "/customer/auth/reviews/" + ISBN;
-  const response = await request.post(API_PREFIX + "/customer/auth/review/" + ISBN, {
-    data: {
-      rating: 5,
-      comment: "Great book!",
+  const response = await request.post(
+    API_PREFIX + "/customer/auth/review/" + ISBN,
+    {
+      data: {
+        rating: 5,
+        comment: "Great book!",
+      },
     },
-  });
+  );
   const review = await response.json();
-  
+
   console.log(review);
 
   const beforeResponse = await request.get(reviewsEndpoint);
   const beforeData = await beforeResponse.json();
-  console.log("🚀 ~ beforeData:", beforeData)
   expect(beforeData.data.length >= 1).toBeTruthy();
 
   const deleteResponse = await request.delete(
@@ -141,12 +142,10 @@ test("delete review with ISBN", async ({ request }) => {
   );
 
   const result = await deleteResponse.text();
-  console.log("🚀 ~ result:", result)
   expect(result).toBeTruthy();
 
   const afterResponse = await request.get(reviewsEndpoint);
   const afterData = await afterResponse.json();
-  console.log("🚀 ~ afterData:", afterData)
   expect(beforeData.data.length).not.toEqual(afterData.data.length);
   expect(afterData.data.length).toBeLessThan(beforeData.data.length);
 });

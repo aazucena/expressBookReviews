@@ -9,10 +9,10 @@ class Database {
     this.BOOKS = buildDataset(BOOKS);
     this.USERS = [
       {
-          "id": crypto.randomUUID(),
-          "username": "john",
-          "password": "doe",
-      }
+        id: crypto.randomUUID(),
+        username: "john",
+        password: "doe",
+      },
     ];
     this.REVIEWS = [];
   }

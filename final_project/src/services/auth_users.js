@@ -4,7 +4,8 @@ const { sendResponse, sendResponseText } = require("../utils/index.js");
 const { STATUS } = require("../variables/index.js");
 const Controller = require("../controllers/auth_users.js");
 
-const { authenticateUser, blockPassword, isValid, validateISBN } = new Controller(DB);
+const { authenticateUser, blockPassword, isValid, validateISBN } =
+  new Controller(DB);
 
 const loginHandler = async (req, res) => {
   const username = req.body.username;
@@ -30,7 +31,11 @@ const loginHandler = async (req, res) => {
       username,
       id: user.id,
     };
-    return await sendResponseText(res, STATUS.OK, "User logged in successfully");
+    return await sendResponseText(
+      res,
+      STATUS.OK,
+      "User logged in successfully",
+    );
   } else {
     return await sendResponseText(
       res,
@@ -54,7 +59,11 @@ const registerHandler = async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   if (!isValid(username)) {
-    return await sendResponseText(res, STATUS.BAD_REQUEST, "Username already exists");
+    return await sendResponseText(
+      res,
+      STATUS.BAD_REQUEST,
+      "Username already exists",
+    );
   }
   if (!username || !password) {
     return await sendResponseText(
@@ -69,7 +78,11 @@ const registerHandler = async (req, res) => {
     username,
     password,
   });
-  return await sendResponseText(res, STATUS.CREATED, "User registered successfully");
+  return await sendResponseText(
+    res,
+    STATUS.CREATED,
+    "User registered successfully",
+  );
 };
 
 /**
@@ -282,10 +295,14 @@ const deleteReviewHandler = async (req, res) => {
       message: isISBN ? "Missing ISBN" : "Missing Review ID",
     });
   }
-  const index = DB.REVIEWS.findIndex((review) => review.id === id || review.book === id);
+  const index = DB.REVIEWS.findIndex(
+    (review) => review.id === id || review.book === id,
+  );
   if (index === -1) {
     return await sendResponse(req, res, STATUS.NOT_FOUND, {
-      message: isISBN ? `Review with ISBN ${id} not found` : `Review with ID ${id} not found`,
+      message: isISBN
+        ? `Review with ISBN ${id} not found`
+        : `Review with ID ${id} not found`,
     });
   }
   const review = DB.REVIEWS[index];
@@ -452,4 +469,3 @@ module.exports = {
   retrieveAllReviewsByISBNHandler,
   clearReviewsHandler,
 };
-
