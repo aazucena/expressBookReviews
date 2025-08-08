@@ -9,11 +9,23 @@ export default defineConfig([
     plugins: { js },
     extends: ["js/recommended", eslintConfigPrettier],
     languageOptions: { globals: globals.browser },
-    ignores: ["eslint.config.mjs", "package*.json", "**/*.spec.js"]
+    ignores: [
+      "eslint.config.mjs",
+      "package*.json",
+      "**/*.spec.js",
+      "playwright.config.js",
+      "playwright-report/**/*.js",
+    ],
   },
   {
     files: ["**/*.js"],
     languageOptions: { sourceType: "commonjs" },
-    ignores: ["eslint.config.mjs", "package*.json", "**/*.spec.js"]
-  }
+    ignores: [
+      "eslint.config.mjs",
+      "package*.json",
+      "**/*.spec.js",
+      "playwright.config.js",
+      "playwright-report/**/*.js",
+    ],
+  },
 ]);

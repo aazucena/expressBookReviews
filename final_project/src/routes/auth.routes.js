@@ -1,6 +1,13 @@
 const express = require("express");
-const { loginHandler, logoutHandler, readMeHandler } = require("../services/auth.js");
-const { createReviewHandler, updateReviewHandler, deleteReviewHandler } = require("../services/reviews.js");
+const {
+  loginHandler,
+  logoutHandler,
+  readMeHandler,
+  createReviewHandler,
+  updateReviewHandler,
+  deleteReviewHandler,
+  retrieveAllReviewsHandler,
+} = require("../services/auth.js");
 const auth = express.Router();
 
 // Only registered users can login
@@ -20,5 +27,7 @@ auth.delete("/auth/review/:id", deleteReviewHandler);
 
 // Update a book review
 auth.patch("/auth/review/:id", updateReviewHandler);
+
+auth.get("/auth/reviews", retrieveAllReviewsHandler);
 
 module.exports = auth;

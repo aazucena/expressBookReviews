@@ -5,8 +5,8 @@ const {
   retrieveBookByISBNHandler,
   retrieveBookByAuthorHandler,
   retrieveBookByTitleHandler,
-} = require("../services/books.js");
-const { retrieveReviewByISBNHandler } = require("../services/reviews.js");
+  retrieveReviewByISBNHandler,
+} = require("../services/public.js");
 const public = express.Router();
 
 // Register a new user
