@@ -25,17 +25,34 @@ const getStatusMessage = (status) => {
   return message;
 };
 
+
 /**
- * Sends a JSON response with a specific structure, including status code,
- * message, payload, and metadata.
+ * Sends a response with a status code and optional payload.
  *
- * @param {import("express").Request} req - The request object, containing method and path.
- * @param {import("express").Response} res - The response object, used to send back the response.
- * @param {number} status - The HTTP status code to set for the response.
- * @param {Object} [payload={}] - An optional payload object to include in the response.
+ * The response is wrapped in a Promise that resolves if the response is sent
+ * successfully, or rejects if there is an error.
  *
- * The response includes a message, status code, and additional metadata such as
- * a timestamp, API version, and request details.
+ * The payload is merged with a few default values into the response JSON:
+ * - code: the code of the status message
+ * - message: the description of the status message
+ * - meta: an object containing information about the request and response
+ *   - timestamp: the current time
+ *   - version: the API version
+ *   - request: an object containing information about the request
+ *     - method: the HTTP method of the request
+ *     - path: the path of the request
+ *     - url: the full URL of the request
+ *     - query: the query string of the request
+ *     - body: the body of the request
+ *     - params: the URL parameters of the request
+ *     - headers: the headers of the request
+ *
+ * @param {import("express").Request} req - The request object, used to get information about the request
+ * @param {import("express").Response} res - The response object, used to send back the response
+ * @param {number} status - The HTTP status code to set for the response
+ * @param {object} [payload] - An optional object to include in the response JSON
+ *
+ * @returns {Promise<import("express").Response>} A promise that resolves if the response is sent successfully, or rejects if there is an error
  */
 const sendResponse = async (req, res, status, payload = {}) => new Promise((resolve, reject) => {
   try {
@@ -67,13 +84,16 @@ const sendResponse = async (req, res, status, payload = {}) => new Promise((reso
   }
 })
 
+
 /**
- * Sends a text response with a status code and optional message. If no message
- * is provided, the status message corresponding to the status code is used.
+ * Sends a text response with the specified status code and optional message.
+ * If no message is provided, it will use the default status message for the given status code.
  *
- * @param {import("express").Response} res - The response object, used to send back the response.
- * @param {number} status - The HTTP status code to set for the response.
- * @param {string} [message] - An optional message to include in the response.
+ * @param {import("express").Response} res - The response object, used to send back the response
+ * @param {number} status - The HTTP status code to set for the response
+ * @param {string} [message] - An optional message to include in the response text
+ *
+ * @returns {Promise<import("express").Response>} A promise that resolves if the response is sent successfully, or rejects if there is an error
  */
 const sendResponseText = async(res, status, message) => new Promise((resolve, reject) => {
   try {

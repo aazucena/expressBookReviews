@@ -14,11 +14,11 @@ const { sendResponseText } = require("../utils/index.js");
  * @param {import("express").NextFunction} next - The next middleware function to be called if authentication succeeds.
  */
 
-const userVerificationMiddleware = (req, res, next) => {
+const userVerificationMiddleware = async(req, res, next) => {
   if (req.session.authorization) {
     let token = req.session.authorization["accessToken"];
     // Verify JWT token
-    jwt.verify(token, "access", (err, user) => {
+    jwt.verify(token, "access", async(err, user) => {
       if (!err) {
         req.user = user;
         next(); // Proceed to the next middleware
