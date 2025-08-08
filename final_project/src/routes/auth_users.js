@@ -25,7 +25,7 @@ regd_users.get("/me", readMeHandler);
 regd_users.post("/auth/review/:isbn", createReviewHandler);
 
 // Delete a book review
-regd_users.delete("/auth/review/:id", deleteReviewHandler);
+regd_users.delete("/auth/review/:isbn", deleteReviewHandler);
 
 // Update a book review
 regd_users.patch("/auth/review/:id", updateReviewHandler);

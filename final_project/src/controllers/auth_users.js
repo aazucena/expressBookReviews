@@ -55,4 +55,48 @@ module.exports = class AuthController {
   blockPassword = (password) => {
     return new Array(password.length).fill("*").join("");
   };
+
+  
+  /**
+   * Validate ISBN-10 or ISBN-13 string.
+   *
+   * @param {string} input - The ISBN string to validate.
+   * @returns {boolean} True if the ISBN is valid, false otherwise.
+   */
+  validateISBN = (input) => {
+    const isbn = input.replace(/[^0-9X]/gi, '');
+    const length = isbn.length;
+
+    if (length !== 10 && length !== 13) {
+      return false; // Not a valid ISBN length
+    }
+
+    if (length === 10) {
+      // Validate ISBN-10
+      let sum = 0;
+      for (let i = 0; i < 9; i++) {
+        const digit = parseInt(isbn[i], 10);
+        if (isNaN(digit)) return false;
+        sum += digit * (10 - i);
+      }
+
+      const checkDigit = isbn[9].toUpperCase() === 'X' ? 10 : parseInt(isbn[9], 10);
+      return (sum % 11 === 0) && !isNaN(checkDigit);
+    }
+
+    if (length === 13) {
+      // Validate ISBN-13
+      let sum = 0;
+      for (let i = 0; i < 12; i++) {
+        const digit = parseInt(isbn[i], 10);
+        if (isNaN(digit)) return false;
+        sum += (i % 2 === 0) ? digit : (digit * 3);
+      }
+
+      const checkDigit = parseInt(isbn[12], 10);
+      return (10 - (sum % 10)) % 10 === checkDigit;
+    }
+
+    return false; // Should not reach here
+  }
 };

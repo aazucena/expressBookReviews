@@ -75,6 +75,7 @@ const sendResponseText = (res, status, message) => {
   return res.status(status).send(message ?? statusMessage);
 };
 
+
 module.exports = {
   getStatusCode,
   getStatusMessage,

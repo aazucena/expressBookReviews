@@ -4,7 +4,7 @@ const { sendResponse, sendResponseText } = require("../utils/index.js");
 const { STATUS } = require("../variables/index.js");
 const Controller = require("../controllers/auth_users.js");
 
-const { authenticateUser, blockPassword, isValid } = new Controller(DB);
+const { authenticateUser, blockPassword, isValid, validateISBN } = new Controller(DB);
 
 /**
  * Handles a login request.
@@ -297,16 +297,17 @@ const deleteReviewHandler = (req, res) => {
     });
   }
 
-  const id = req.params.id;
+  const id = req.params.isbn;
+  const isISBN = validateISBN(id);
   if (!id) {
     return sendResponse(req, res, STATUS.BAD_REQUEST, {
-      message: "Missing Review ID",
+      message: isISBN ? "Missing ISBN" : "Missing Review ID",
     });
   }
-  const index = DB.REVIEWS.findIndex((review) => review.id === id);
+  const index = DB.REVIEWS.findIndex((review) => review.id === id || review.book === id);
   if (index === -1) {
     return sendResponse(req, res, STATUS.NOT_FOUND, {
-      message: `Review with ID ${id} not found`,
+      message: isISBN ? `Review with ISBN ${id} not found` : `Review with ID ${id} not found`,
     });
   }
   const review = DB.REVIEWS[index];
