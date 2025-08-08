@@ -22,7 +22,7 @@ A comprehensive REST API for managing book reviews using Node.js, Express, OpenA
 ### Setup
 
 1. **Clone the repository**:
-   git clone https://github.com/your-username/book-review-api.git
+   git clone [https://github.com/your-username/book-review-api.git](https://github.com/aazucena/expressBookReviews.git)
 2. **Install dependencies**:
    npm install
 3. **Run the API**:
