@@ -385,6 +385,79 @@ const retrieveAllReviewsHandler = (req, res) => {
   });
 };
 
+/**
+ * Retrieves all reviews by a user for a given book.
+ *
+ * If the user is not logged in, it sends an unauthorized response indicating that the user is not logged in.
+ * If the ISBN is missing, it sends a bad request response indicating that the ISBN is missing.
+ * If the reviews are successfully retrieved, it sends an OK response with the review data, a message indicating that the reviews were retrieved successfully, and a meta object containing pagination data.
+ *
+ * @param {import("express").Request} req - The request object, containing the book ISBN.
+ * @param {import("express").Response} res - The response object, used to send back the response.
+ *
+ * @returns {Promise<void>}
+ */
+const retrieveAllReviewsByISBNHandler = (req, res) => {
+  const session = req.session;
+  const username = session.authorization.username;
+  if (!isValid(username)) {
+    return sendResponse(req, res, STATUS.UNAUTHORIZED, {
+      message: "User not logged in",
+      context: session,
+    });
+  }
+
+  const isbn = req.params.isbn;
+  if (!isbn) {
+    return sendResponse(req, res, STATUS.BAD_REQUEST, {
+      message: "Missing ISBN",
+    });
+  }
+
+  const reviews = DB.REVIEWS.filter(
+    (review) =>
+      review.user === req.session.authorization.id && review.book === isbn,
+  );
+  return sendResponse(req, res, STATUS.OK, {
+    data: reviews,
+    message: "Successfully retrieved all reviews",
+    meta: {
+      total: DB.REVIEWS.length,
+      page: 1,
+      page_size: reviews.length,
+      total_pages: 1,
+    },
+  });
+};
+
+/**
+ * Clears all reviews by the currently logged in user.
+ *
+ * If the user is not logged in, it sends an unauthorized response indicating that the user is not logged in.
+ * If the reviews are successfully cleared, it sends an OK response with a message indicating that the reviews were cleared successfully.
+ *
+ * @param {import("express").Request} req - The request object, containing the session.
+ * @param {import("express").Response} res - The response object, used to send back the response.
+ *
+ * @returns {Promise<void>}
+ */
+const clearReviewsHandler = (req, res) => {
+  const session = req.session;
+  const username = session.authorization.username;
+  if (!isValid(username)) {
+    return sendResponse(req, res, STATUS.UNAUTHORIZED, {
+      message: "User not logged in",
+      context: session,
+    });
+  }
+  DB.REVIEWS = DB.REVIEWS.filter(
+    (review) => review.user !== req.session.authorization.id,
+  );
+  return sendResponse(req, res, STATUS.OK, {
+    message: "Clear reviews successfully",
+  });
+};
+
 module.exports = {
   loginHandler,
   logoutHandler,
@@ -396,4 +469,6 @@ module.exports = {
   deleteReviewHandler,
   retrieveReviewByIDHandler,
   retrieveAllReviewsHandler,
+  retrieveAllReviewsByISBNHandler,
+  clearReviewsHandler,
 };

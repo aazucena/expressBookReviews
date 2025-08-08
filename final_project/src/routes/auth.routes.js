@@ -7,6 +7,8 @@ const {
   updateReviewHandler,
   deleteReviewHandler,
   retrieveAllReviewsHandler,
+  retrieveAllReviewsByISBNHandler,
+  clearReviewsHandler,
 } = require("../services/auth.js");
 const auth = express.Router();
 
@@ -29,5 +31,9 @@ auth.delete("/auth/review/:id", deleteReviewHandler);
 auth.patch("/auth/review/:id", updateReviewHandler);
 
 auth.get("/auth/reviews", retrieveAllReviewsHandler);
+
+auth.get("/auth/reviews/:isbn", retrieveAllReviewsByISBNHandler);
+
+auth.post("/auth/reviews/clear", clearReviewsHandler);
 
 module.exports = auth;
