@@ -11,5 +11,7 @@ const { PORT } = require("./variables/index.js");
 module.exports = () => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log(`Swagger UI available at http://localhost:${PORT}/api-docs`);
+    console.log(`OpenAPI specification available at http://localhost:${PORT}/api-spec`);
   });
 };
